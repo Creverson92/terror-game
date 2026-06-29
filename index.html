@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Euz&eacute;bios-Terror</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <section id="menu" class="screen screen-active">
+        <div class="rain" aria-hidden="true"></div>
+        <div class="menu-content">
+          <p class="kicker">Noite 03:17</p>
+          <h1>Euz&eacute;bios-Terror</h1>
+          <p class="subtitle">Entre com seu nome, atravesse 10 fases e dispute o ranking online com outros jogadores conectados ao mesmo servidor.</p>
+          <div class="player-box">
+            <label for="playerName">Jogador</label>
+            <input id="playerName" maxlength="18" placeholder="Seu nome">
+          </div>
+          <div class="menu-actions">
+            <button id="startBtn" class="primary">Iniciar</button>
+            <button id="howBtn" class="ghost">Controles</button>
+          </div>
+          <div class="online-board">
+            <section>
+              <h2>Online</h2>
+              <ol id="onlinePlayers">
+                <li>Nenhum jogador conectado</li>
+              </ol>
+            </section>
+            <section>
+              <h2>Ranking</h2>
+              <ol id="rankingList">
+                <li>Sem pontuacao ainda</li>
+              </ol>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section id="help" class="screen">
+        <div class="panel">
+          <h2>Controles</h2>
+          <p>Use WASD ou setas para andar. Segure Shift para correr. Aperte F para ligar ou desligar a lanterna, E para interagir e Esc para pausar.</p>
+          <p>O som chama a presenca. Correr ajuda, mas tambem denuncia voce.</p>
+          <button id="backBtn" class="primary">Voltar</button>
+        </div>
+      </section>
+
+      <section id="game" class="game screen" aria-label="Jogo Euz&eacute;bios-Terror">
+        <canvas id="gameCanvas" width="1280" height="720"></canvas>
+        <div class="hud">
+          <div class="brand">Euz&eacute;bios-Terror</div>
+          <div class="meters">
+            <label>Lanterna <meter id="batteryMeter" min="0" max="100" value="100"></meter></label>
+            <label>Sanidade <meter id="sanityMeter" min="0" max="100" value="100"></meter></label>
+          </div>
+          <div class="status-stack">
+            <div id="levelLabel">Fase 1/10</div>
+            <div id="scoreLabel">0 pts</div>
+            <div id="objective" class="objective">Ache uma pista.</div>
+          </div>
+        </div>
+        <div id="prompt" class="prompt"></div>
+        <div class="touch-controls" aria-label="Controles de toque">
+          <div class="touch-pad">
+            <button data-touch="up">▲</button>
+            <div>
+              <button data-touch="left">◀</button>
+              <button data-touch="down">▼</button>
+              <button data-touch="right">▶</button>
+            </div>
+          </div>
+          <div class="touch-actions">
+            <button id="touchRun">Correr</button>
+            <button id="touchLight">Lanterna</button>
+            <button id="touchUse">Usar</button>
+          </div>
+        </div>
+        <div id="note" class="note" hidden>
+          <p id="noteText"></p>
+          <button id="closeNoteBtn" class="primary">Fechar</button>
+        </div>
+        <div id="pause" class="overlay" hidden>
+          <h2>Pausado</h2>
+          <button id="resumeBtn" class="primary">Continuar</button>
+          <button id="restartBtn" class="ghost">Reiniciar</button>
+        </div>
+        <div id="ending" class="overlay ending" hidden>
+          <h2 id="endingTitle"></h2>
+          <p id="endingText"></p>
+          <ol id="endingRanking" class="ending-ranking"></ol>
+          <button id="endingRestartBtn" class="primary">Jogar de novo</button>
+        </div>
+      </section>
+    </main>
+    <script src="game.js"></script>
+  </body>
+</html>
