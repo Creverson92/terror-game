@@ -39,6 +39,7 @@ let sessionId = localStorage.getItem("euzebiosSessionId") || Math.random().toStr
 localStorage.setItem("euzebiosSessionId", sessionId);
 let onlineTimer;
 let scoreSent = false;
+let lastStartTap = 0;
 
 const tile = 64;
 const map = [
@@ -747,16 +748,32 @@ function resizeCanvas() {
   canvas.height = window.innerHeight;
 }
 
-document.getElementById("startBtn").addEventListener("click", (event) => {
+async function requestGameFullscreen() {
+  const target = document.documentElement;
+  try {
+    if (!document.fullscreenElement && target.requestFullscreen) {
+      await target.requestFullscreen({ navigationUI: "hide" });
+    }
+    if (screen.orientation?.lock) {
+      await screen.orientation.lock("landscape");
+    }
+  } catch {
+    // Some mobile browsers only hide the address bar after scroll or PWA install.
+  }
+}
+
+function startFromMenu(event) {
   event.preventDefault();
+  const now = Date.now();
+  if (now - lastStartTap < 600) return;
+  lastStartTap = now;
   unlockMenuAudio();
+  requestGameFullscreen();
   resetGame();
-});
-document.getElementById("startBtn").addEventListener("pointerup", (event) => {
-  event.preventDefault();
-  unlockMenuAudio();
-  resetGame();
-});
+}
+
+document.getElementById("startBtn").addEventListener("click", startFromMenu);
+document.getElementById("startBtn").addEventListener("pointerup", startFromMenu);
 document.getElementById("howBtn").addEventListener("click", () => showScreen("help"));
 document.getElementById("backBtn").addEventListener("click", () => showScreen("menu"));
 document.getElementById("closeNoteBtn").addEventListener("click", () => {

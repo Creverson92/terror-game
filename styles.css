@@ -345,6 +345,30 @@ meter {
   font-size: 12px;
 }
 
+.rotate-warning {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  place-items: center;
+  padding: 28px;
+  background: #050606;
+  color: var(--ink);
+  text-align: center;
+}
+
+.rotate-warning strong {
+  display: block;
+  color: var(--amber);
+  font-size: 30px;
+  margin-bottom: 8px;
+}
+
+.rotate-warning span {
+  color: var(--muted);
+  font-weight: 700;
+}
+
 .note,
 .overlay {
   position: absolute;
@@ -453,6 +477,70 @@ meter {
     font-size: clamp(9px, 2.6vw, 11px);
     white-space: normal;
     line-height: 1.05;
+  }
+}
+
+@media (max-width: 1024px) and (orientation: landscape) {
+  .hud {
+    grid-template-columns: auto 1fr auto;
+    inset: max(8px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) auto max(12px, env(safe-area-inset-left));
+    align-items: start;
+    font-size: 11px;
+  }
+
+  .meters {
+    justify-content: center;
+  }
+
+  .status-stack {
+    justify-self: end;
+    text-align: right;
+    max-width: 34vw;
+  }
+
+  .touch-controls {
+    left: max(18px, env(safe-area-inset-left));
+    right: max(18px, env(safe-area-inset-right));
+    bottom: max(12px, env(safe-area-inset-bottom));
+    align-items: end;
+  }
+
+  .touch-pad {
+    width: 154px;
+  }
+
+  .touch-actions {
+    width: 250px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .touch-controls button {
+    min-width: 46px;
+    min-height: 46px;
+    width: 46px;
+    height: 46px;
+  }
+
+  .touch-actions button {
+    width: 100%;
+    min-width: 0;
+    height: 46px;
+    border-radius: 7px;
+    font-size: 11px;
+  }
+
+  .prompt {
+    bottom: calc(74px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 720px) and (orientation: portrait) {
+  .screen-active.game ~ .rotate-warning {
+    display: grid;
+  }
+
+  body:has(#game.screen-active) .rotate-warning {
+    display: grid;
   }
 }
 

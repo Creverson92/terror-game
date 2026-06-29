@@ -1,0 +1,11 @@
+{
+  "name": "Euzebios-Terror",
+  "short_name": "Euzebios",
+  "start_url": "/",
+  "scope": "/",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#050606",
+  "theme_color": "#050606",
+  "description": "Jogo de terror online com 10 fases e ranking."
+}

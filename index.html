@@ -2,12 +2,20 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#050606">
     <title>Euz&eacute;bios-Terror</title>
+    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <main class="shell">
+      <div class="rotate-warning">
+        <strong>Vire o celular</strong>
+        <span>O jogo fica melhor na horizontal.</span>
+      </div>
       <section id="menu" class="screen screen-active">
         <div class="rain" aria-hidden="true"></div>
         <div class="menu-content">
@@ -65,11 +73,11 @@
         <div id="prompt" class="prompt"></div>
         <div class="touch-controls" aria-label="Controles de toque">
           <div class="touch-pad">
-            <button data-touch="up">▲</button>
+            <button data-touch="up" aria-label="Subir">UP</button>
             <div>
-              <button data-touch="left">◀</button>
-              <button data-touch="down">▼</button>
-              <button data-touch="right">▶</button>
+              <button data-touch="left" aria-label="Esquerda">L</button>
+              <button data-touch="down" aria-label="Descer">DN</button>
+              <button data-touch="right" aria-label="Direita">R</button>
             </div>
           </div>
           <div class="touch-actions">
