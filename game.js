@@ -153,6 +153,10 @@ function playerName() {
 function resetStage(levelNumber = 1, keepScore = false) {
   const level = levels[levelNumber - 1];
   const setup = levelSetups[levelNumber - 1] || levelSetups[0];
+  touchMove.run = false;
+  const runButton = document.getElementById("touchRun");
+  runButton.classList.remove("active");
+  runButton.setAttribute("aria-pressed", "false");
   Object.assign(state, {
     mode: "game",
     paused: false,
@@ -206,7 +210,7 @@ function startAudio() {
 function unlockMenuAudio() {
   startAudio();
   if (audio?.state === "running") {
-    windNoise(1.6, 0.01);
+    tone(36, 1.4, 0.012, "sine");
     nextMenuSound = 4.5;
   }
 }
@@ -521,12 +525,12 @@ function updateMenuAudio(dt) {
   if (nextMenuSound > 0) return;
   const roll = Math.random();
   if (roll < 0.42) {
-    windNoise(1.7, 0.015);
-    tone(34, 1.1, 0.014, "sine");
+    tone(34, 1.4, 0.012, "sine");
+    tone(49, 1.8, 0.006, "triangle");
   } else if (roll < 0.72) {
     distantKnock();
   } else {
-    whisper();
+    tone(156 + Math.random() * 22, 0.35, 0.005, "triangle");
   }
   nextMenuSound = 4.5 + Math.random() * 5.5;
 }
@@ -547,8 +551,8 @@ function updateTerrorAudio(fearDistance, dt) {
     } else {
       const roll = Math.random();
       if (roll < 0.42) distantPianoNote();
-      else if (roll < 0.72) windNoise(1.2, 0.012);
-      else whisper();
+      else if (roll < 0.72) tone(42, 1.2, 0.01, "sine");
+      else tone(172 + Math.random() * 28, 0.3, 0.005, "triangle");
       nextGameplayMoodSound = 5 + Math.random() * 7;
     }
   }
@@ -809,11 +813,9 @@ document.querySelectorAll("[data-touch]").forEach((button) => {
 
 document.getElementById("touchRun").addEventListener("pointerdown", (event) => {
   event.preventDefault();
-  touchMove.run = true;
-});
-document.getElementById("touchRun").addEventListener("pointerup", (event) => {
-  event.preventDefault();
-  touchMove.run = false;
+  touchMove.run = !touchMove.run;
+  event.currentTarget.classList.toggle("active", touchMove.run);
+  event.currentTarget.setAttribute("aria-pressed", String(touchMove.run));
 });
 document.getElementById("touchLight").addEventListener("click", () => {
   if (state.mode === "game" && state.battery > 0) {
@@ -889,6 +891,8 @@ window.addEventListener("keydown", (event) => {
 
 window.addEventListener("keyup", (event) => keys.delete(event.key.toLowerCase()));
 window.addEventListener("pointerdown", unlockMenuAudio, { once: true });
+window.addEventListener("contextmenu", (event) => event.preventDefault());
+window.addEventListener("selectstart", (event) => event.preventDefault());
 window.addEventListener("resize", resizeCanvas);
 window.visualViewport?.addEventListener("resize", resizeCanvas);
 
