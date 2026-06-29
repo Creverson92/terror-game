@@ -740,12 +740,12 @@ function loop(time) {
 }
 
 function resizeCanvas() {
-  const ratio = window.devicePixelRatio || 1;
-  canvas.width = Math.floor(window.innerWidth * ratio);
-  canvas.height = Math.floor(window.innerHeight * ratio);
-  ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  const viewport = window.visualViewport;
+  const width = Math.floor(viewport?.width || window.innerWidth);
+  const height = Math.floor(viewport?.height || window.innerHeight);
+  canvas.width = width;
+  canvas.height = height;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
 }
 
 async function requestGameFullscreen() {
@@ -891,6 +891,7 @@ window.addEventListener("keydown", (event) => {
 window.addEventListener("keyup", (event) => keys.delete(event.key.toLowerCase()));
 window.addEventListener("pointerdown", unlockMenuAudio, { once: true });
 window.addEventListener("resize", resizeCanvas);
+window.visualViewport?.addEventListener("resize", resizeCanvas);
 
 resizeCanvas();
 initWorld();

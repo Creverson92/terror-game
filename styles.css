@@ -535,12 +535,68 @@ meter {
 }
 
 @media (max-width: 720px) and (orientation: portrait) {
-  .screen-active.game ~ .rotate-warning {
-    display: grid;
+  .hud {
+    inset: max(10px, env(safe-area-inset-top)) 12px auto;
+    gap: 4px;
   }
 
-  body:has(#game.screen-active) .rotate-warning {
+  .brand {
+    font-size: 13px;
+  }
+
+  .meters {
     display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+  }
+
+  meter {
+    width: min(28vw, 116px);
+  }
+
+  .status-stack {
+    font-size: 12px;
+  }
+
+  .objective {
+    max-width: calc(100vw - 24px);
+    font-size: 12px;
+  }
+
+  .touch-controls {
+    left: 12px;
+    right: 12px;
+    bottom: calc(82px + env(safe-area-inset-bottom));
+    align-items: end;
+  }
+
+  .touch-pad {
+    width: 150px;
+  }
+
+  .touch-controls button {
+    min-width: 48px;
+    min-height: 48px;
+    width: 48px;
+    height: 48px;
+    font-size: 12px;
+  }
+
+  .touch-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: min(28vw, 96px);
+  }
+
+  .touch-actions button {
+    width: 100%;
+    min-width: 0;
+    height: 42px;
+    font-size: 10px;
+  }
+
+  .prompt {
+    bottom: calc(238px + env(safe-area-inset-bottom));
   }
 }
 
