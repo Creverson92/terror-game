@@ -33,6 +33,7 @@ let audio;
 let ambientNodes;
 let nextScareSound = 0;
 let nextMenuSound = 0;
+let nextGameplayMoodSound = 0;
 let finalBossCalled = false;
 let sessionId = localStorage.getItem("euzebiosSessionId") || Math.random().toString(36).slice(2);
 localStorage.setItem("euzebiosSessionId", sessionId);
@@ -292,6 +293,20 @@ function whisper() {
   tone(185 + Math.random() * 30, 0.22, 0.006, "triangle");
 }
 
+function distantPianoNote() {
+  if (!audio || audio.state !== "running") return;
+  const notes = [146.83, 164.81, 196.0, 220.0, 246.94];
+  const base = notes[Math.floor(Math.random() * notes.length)];
+  tone(base, 1.8, 0.018, "triangle");
+  setTimeout(() => tone(base * 0.5, 2.2, 0.01, "sine"), 80);
+}
+
+function heartbeat() {
+  if (!audio || audio.state !== "running") return;
+  tone(54, 0.12, 0.035, "sine");
+  setTimeout(() => tone(48, 0.15, 0.026, "sine"), 210);
+}
+
 function scream(duration = 0.9, gain = 0.055) {
   if (!audio || audio.state !== "running") return;
   const oscA = audio.createOscillator();
@@ -520,9 +535,22 @@ function updateTerrorAudio(fearDistance, dt) {
   if (!audio || audio.state !== "running") return;
   if (ambientNodes) {
     const danger = Math.max(0, 1 - fearDistance / 360);
-    ambientNodes.drone.frequency.setTargetAtTime(38 + state.level * 1.4 + danger * 18, audio.currentTime, 0.2);
-    ambientNodes.droneGain.gain.setTargetAtTime(0.01 + danger * 0.025, audio.currentTime, 0.2);
-    ambientNodes.wobbleGain.gain.setTargetAtTime(0.004 + danger * 0.016, audio.currentTime, 0.2);
+    ambientNodes.drone.frequency.setTargetAtTime(34 + state.level * 1.2 + danger * 22, audio.currentTime, 0.25);
+    ambientNodes.droneGain.gain.setTargetAtTime(0.012 + danger * 0.026, audio.currentTime, 0.25);
+    ambientNodes.wobbleGain.gain.setTargetAtTime(0.005 + danger * 0.018, audio.currentTime, 0.25);
+  }
+  nextGameplayMoodSound -= dt;
+  if (nextGameplayMoodSound <= 0) {
+    if (fearDistance < 170) {
+      heartbeat();
+      nextGameplayMoodSound = 0.95 + Math.random() * 0.55;
+    } else {
+      const roll = Math.random();
+      if (roll < 0.42) distantPianoNote();
+      else if (roll < 0.72) windNoise(1.2, 0.012);
+      else whisper();
+      nextGameplayMoodSound = 5 + Math.random() * 7;
+    }
   }
   nextScareSound -= dt;
   if (nextScareSound <= 0) {
