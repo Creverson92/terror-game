@@ -302,10 +302,12 @@ meter {
 .touch-controls {
   display: none;
   position: absolute;
-  inset: auto 14px 14px;
+  left: max(10px, env(safe-area-inset-left));
+  right: max(10px, env(safe-area-inset-right));
+  bottom: max(10px, env(safe-area-inset-bottom));
   justify-content: space-between;
   align-items: end;
-  gap: 14px;
+  gap: 10px;
   pointer-events: none;
 }
 
@@ -358,18 +360,31 @@ meter {
 }
 
 @media (max-width: 720px) {
+  html,
+  body {
+    min-height: 100dvh;
+  }
+
   body {
     touch-action: none;
   }
 
   .hud {
     grid-template-columns: 1fr;
-    gap: 8px;
-    font-size: 12px;
+    inset: 8px 10px auto;
+    gap: 5px;
+    font-size: 11px;
   }
 
   .meters {
     justify-content: flex-start;
+    gap: 8px;
+    font-size: 11px;
+  }
+
+  meter {
+    width: 82px;
+    height: 8px;
   }
 
   .objective {
@@ -392,14 +407,72 @@ meter {
 
   .touch-controls {
     display: flex;
+    z-index: 2;
   }
 
   .prompt {
-    bottom: 132px;
+    bottom: calc(112px + env(safe-area-inset-bottom));
+    font-size: 13px;
   }
 
   .menu-content {
     max-height: 100vh;
     overflow-y: auto;
+  }
+
+  .touch-controls button {
+    min-width: 44px;
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    font-size: 15px;
+  }
+
+  .touch-pad,
+  .touch-actions {
+    gap: 6px;
+  }
+
+  .touch-pad div,
+  .touch-actions {
+    gap: 6px;
+  }
+
+  .touch-actions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: min(48vw, 210px);
+  }
+
+  .touch-actions button {
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+    border-radius: 7px;
+    font-size: clamp(9px, 2.6vw, 11px);
+    white-space: normal;
+    line-height: 1.05;
+  }
+}
+
+@media (max-width: 380px) {
+  .touch-controls {
+    gap: 6px;
+  }
+
+  .touch-controls button {
+    min-width: 39px;
+    min-height: 39px;
+    width: 39px;
+    height: 39px;
+  }
+
+  .touch-actions {
+    width: min(50vw, 174px);
+  }
+
+  .prompt {
+    bottom: calc(102px + env(safe-area-inset-bottom));
   }
 }
