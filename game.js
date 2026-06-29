@@ -206,9 +206,8 @@ function startAudio() {
 function unlockMenuAudio() {
   startAudio();
   if (audio?.state === "running") {
-    tone(36, 1.4, 0.018, "sine");
-    tone(52, 1.8, 0.011, "triangle");
-    nextMenuSound = 2.8;
+    windNoise(1.6, 0.01);
+    nextMenuSound = 4.5;
   }
 }
 
@@ -218,12 +217,12 @@ function startAmbient() {
   const wobble = audio.createOscillator();
   const droneGain = audio.createGain();
   const wobbleGain = audio.createGain();
-  drone.type = "sawtooth";
+  drone.type = "sine";
   wobble.type = "sine";
-  drone.frequency.value = 38;
-  wobble.frequency.value = 74;
-  droneGain.gain.value = 0.012;
-  wobbleGain.gain.value = 0.006;
+  drone.frequency.value = 32;
+  wobble.frequency.value = 64;
+  droneGain.gain.value = 0.007;
+  wobbleGain.gain.value = 0.003;
   drone.connect(droneGain).connect(audio.destination);
   wobble.connect(wobbleGain).connect(audio.destination);
   drone.start();

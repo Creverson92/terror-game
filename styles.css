@@ -480,6 +480,38 @@ meter {
   }
 }
 
+@media (pointer: coarse), (hover: none) {
+  .touch-controls {
+    display: flex;
+    z-index: 4;
+  }
+
+  .touch-controls button {
+    min-width: 48px;
+    min-height: 48px;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    font-size: 12px;
+  }
+
+  .touch-actions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: min(38vw, 260px);
+  }
+
+  .touch-actions button {
+    width: 100%;
+    min-width: 0;
+    height: 48px;
+    border-radius: 7px;
+    font-size: clamp(9px, 2.3vw, 11px);
+    white-space: normal;
+    line-height: 1.05;
+  }
+}
+
 @media (max-width: 1024px) and (orientation: landscape) {
   .hud {
     grid-template-columns: auto 1fr auto;
@@ -531,6 +563,27 @@ meter {
 
   .prompt {
     bottom: calc(74px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (pointer: coarse) and (orientation: landscape) {
+  .touch-controls {
+    left: max(22px, env(safe-area-inset-left));
+    right: max(64px, env(safe-area-inset-right));
+    bottom: max(18px, env(safe-area-inset-bottom));
+    align-items: end;
+  }
+
+  .touch-pad {
+    width: 158px;
+  }
+
+  .touch-actions {
+    width: min(34vw, 250px);
+  }
+
+  .prompt {
+    bottom: calc(82px + env(safe-area-inset-bottom));
   }
 }
 
