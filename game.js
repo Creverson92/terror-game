@@ -204,8 +204,9 @@ function startAudio() {
 function unlockMenuAudio() {
   startAudio();
   if (audio?.state === "running") {
-    tone(45, 0.45, 0.035, "sawtooth");
-    nextMenuSound = 0.8;
+    tone(36, 1.4, 0.018, "sine");
+    tone(52, 1.8, 0.011, "triangle");
+    nextMenuSound = 2.8;
   }
 }
 
@@ -256,6 +257,39 @@ function noiseBurst(duration = 0.35, gain = 0.035) {
   source.connect(filter).connect(vol).connect(audio.destination);
   source.start();
   vol.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + duration);
+}
+
+function windNoise(duration = 1.8, gain = 0.018) {
+  if (!audio || audio.state !== "running") return;
+  const buffer = audio.createBuffer(1, audio.sampleRate * duration, audio.sampleRate);
+  const data = buffer.getChannelData(0);
+  let last = 0;
+  for (let i = 0; i < data.length; i += 1) {
+    last = last * 0.96 + (Math.random() * 2 - 1) * 0.04;
+    data[i] = last * (1 - i / data.length);
+  }
+  const source = audio.createBufferSource();
+  const filter = audio.createBiquadFilter();
+  const vol = audio.createGain();
+  filter.type = "lowpass";
+  filter.frequency.value = 360;
+  vol.gain.value = gain;
+  source.buffer = buffer;
+  source.connect(filter).connect(vol).connect(audio.destination);
+  source.start();
+  vol.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + duration);
+}
+
+function distantKnock() {
+  if (!audio || audio.state !== "running") return;
+  tone(58, 0.12, 0.04, "sine");
+  setTimeout(() => tone(48, 0.1, 0.026, "sine"), 180);
+}
+
+function whisper() {
+  if (!audio || audio.state !== "running") return;
+  windNoise(0.65, 0.012);
+  tone(185 + Math.random() * 30, 0.22, 0.006, "triangle");
 }
 
 function scream(duration = 0.9, gain = 0.055) {
@@ -464,24 +498,22 @@ function update(dt) {
 
 function updateMenuAudio(dt) {
   if (ambientNodes) {
-    ambientNodes.drone.frequency.setTargetAtTime(34, audio.currentTime, 0.4);
-    ambientNodes.droneGain.gain.setTargetAtTime(0.018, audio.currentTime, 0.4);
-    ambientNodes.wobbleGain.gain.setTargetAtTime(0.008, audio.currentTime, 0.4);
+    ambientNodes.drone.frequency.setTargetAtTime(32, audio.currentTime, 0.8);
+    ambientNodes.droneGain.gain.setTargetAtTime(0.009, audio.currentTime, 0.8);
+    ambientNodes.wobbleGain.gain.setTargetAtTime(0.004, audio.currentTime, 0.8);
   }
   nextMenuSound -= dt;
   if (nextMenuSound > 0) return;
   const roll = Math.random();
-  if (roll < 0.28) {
-    noiseBurst(0.55, 0.035);
-    tone(31, 0.8, 0.045, "sawtooth");
-    if (Math.random() < 0.45) scream(0.7, 0.04);
-  } else if (roll < 0.62) {
-    tone(82 + Math.random() * 18, 0.18, 0.018, "triangle");
-    tone(44, 0.28, 0.018, "sine");
+  if (roll < 0.42) {
+    windNoise(1.7, 0.015);
+    tone(34, 1.1, 0.014, "sine");
+  } else if (roll < 0.72) {
+    distantKnock();
   } else {
-    tone(116 + Math.random() * 35, 0.12, 0.012, "square");
+    whisper();
   }
-  nextMenuSound = 3.2 + Math.random() * 4.8;
+  nextMenuSound = 4.5 + Math.random() * 5.5;
 }
 
 function updateTerrorAudio(fearDistance, dt) {
