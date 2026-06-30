@@ -779,9 +779,15 @@ document.getElementById("startBtn").addEventListener("click", startFromMenu);
 document.getElementById("startBtn").addEventListener("pointerup", startFromMenu);
 document.getElementById("howBtn").addEventListener("click", () => showScreen("help"));
 document.getElementById("backBtn").addEventListener("click", () => showScreen("menu"));
-document.getElementById("closeNoteBtn").addEventListener("click", () => {
+function closeNote() {
   ui.note.hidden = true;
   entity.awake = true;
+}
+
+document.getElementById("closeNoteBtn").addEventListener("click", closeNote);
+document.getElementById("closeNoteBtn").addEventListener("pointerdown", (event) => {
+  event.preventDefault();
+  closeNote();
 });
 document.getElementById("resumeBtn").addEventListener("click", () => {
   state.paused = false;
@@ -898,6 +904,7 @@ window.addEventListener("pointerdown", unlockMenuAudio, { once: true });
 function blockMobileSelection(event) {
   const target = event.target;
   if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) return;
+  if (target.closest?.(".note, .overlay")) return;
   event.preventDefault();
   window.getSelection?.().removeAllRanges();
 }
