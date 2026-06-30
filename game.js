@@ -817,13 +817,17 @@ document.getElementById("touchRun").addEventListener("pointerdown", (event) => {
   event.currentTarget.classList.toggle("active", touchMove.run);
   event.currentTarget.setAttribute("aria-pressed", String(touchMove.run));
 });
-document.getElementById("touchLight").addEventListener("click", () => {
+document.getElementById("touchLight").addEventListener("pointerdown", (event) => {
+  event.preventDefault();
   if (state.mode === "game" && state.battery > 0) {
     state.flashlight = !state.flashlight;
     tone(state.flashlight ? 240 : 120, 0.08, 0.02, "square");
   }
 });
-document.getElementById("touchUse").addEventListener("click", interact);
+document.getElementById("touchUse").addEventListener("pointerdown", (event) => {
+  event.preventDefault();
+  interact();
+});
 
 async function api(path, data) {
   try {
@@ -891,8 +895,27 @@ window.addEventListener("keydown", (event) => {
 
 window.addEventListener("keyup", (event) => keys.delete(event.key.toLowerCase()));
 window.addEventListener("pointerdown", unlockMenuAudio, { once: true });
-window.addEventListener("contextmenu", (event) => event.preventDefault());
-window.addEventListener("selectstart", (event) => event.preventDefault());
+function blockMobileSelection(event) {
+  const target = event.target;
+  if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) return;
+  event.preventDefault();
+  window.getSelection?.().removeAllRanges();
+}
+
+["contextmenu", "selectstart", "dragstart"].forEach((eventName) => {
+  window.addEventListener(eventName, (event) => {
+    event.preventDefault();
+    window.getSelection?.().removeAllRanges();
+  }, { capture: true });
+});
+
+["touchstart", "touchmove", "touchend"].forEach((eventName) => {
+  screens.game.addEventListener(eventName, blockMobileSelection, { capture: true, passive: false });
+});
+
+document.addEventListener("selectionchange", () => {
+  if (state.mode === "game") window.getSelection?.().removeAllRanges();
+});
 window.addEventListener("resize", resizeCanvas);
 window.visualViewport?.addEventListener("resize", resizeCanvas);
 

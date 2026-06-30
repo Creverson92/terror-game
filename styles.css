@@ -12,6 +12,9 @@
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 html,
@@ -25,7 +28,9 @@ body {
   font-family: "Segoe UI", Arial, sans-serif;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
+  overscroll-behavior: none;
 }
 
 button {
@@ -37,6 +42,10 @@ button {
   background: #181a1c;
   font: 700 15px/1 "Segoe UI", Arial, sans-serif;
   cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
 }
 
 button:hover {
@@ -233,6 +242,22 @@ canvas {
   height: 100vh;
   display: block;
   image-rendering: auto;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: none;
+}
+
+.game,
+.hud,
+.prompt,
+.touch-controls,
+.touch-controls *,
+.note,
+.overlay {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .hud {
